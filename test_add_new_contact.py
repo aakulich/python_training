@@ -13,18 +13,6 @@ class TestAddNewContact(unittest.TestCase):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
 
-    def test_add_new_contact(self):
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd, username="admin", password="secret")
-        self.create_new_contact(wd, Contact(firstname="first", middlename="middle", lastname="last", nickname="nick",
-                           title="my_title", company="my_company", address="my_address", home="my_home",
-                           mobile="my_mobile", work="my_work", fax="my_fax", email="my_email", email2="my_email2",
-                           email3="my_email3", homepage="my_homepage", bday="1", bmonth="January", byear="1985", aday="1",
-                           amonth="January", ayear="1985", address2="second_address", phone2="second_home",
-                           notes="my_notes"))
-        self.logout(wd)
-
     def create_new_contact(self, wd, contact):
         # init contact creation
         wd.find_element_by_link_text("add new").click()
@@ -119,6 +107,32 @@ class TestAddNewContact(unittest.TestCase):
 
     def open_home_page(self, wd):
         wd.get("http://localhost/addressbook/")
+
+    def test_add_new_contact(self):
+        wd = self.wd
+        self.open_home_page(wd)
+        self.login(wd, username="admin", password="secret")
+        self.create_new_contact(wd, Contact(firstname="first", middlename="middle", lastname="last", nickname="nick",
+                           title="my_title", company="my_company", address="my_address", home="my_home",
+                           mobile="my_mobile", work="my_work", fax="my_fax", email="my_email", email2="my_email2",
+                           email3="my_email3", homepage="my_homepage", bday="1", bmonth="January", byear="1985", aday="1",
+                           amonth="January", ayear="1985", address2="second_address", phone2="second_home",
+                           notes="my_notes"))
+        self.logout(wd)
+
+    def test_add_empty_contact(self):
+        wd = self.wd
+        self.open_home_page(wd)
+        self.login(wd, username="admin", password="secret")
+        self.create_new_contact(wd, Contact(firstname="", middlename="", lastname="", nickname="",
+                           title="", company="", address="", home="",
+                           mobile="", work="", fax="", email="", email2="",
+                           email3="", homepage="", bday="", bmonth="-", byear="", aday="",
+                           amonth="-", ayear="", address2="", phone2="",
+                           notes=""))
+        self.logout(wd)
+
+
 
     def tearDown(self):
         self.wd.quit()
