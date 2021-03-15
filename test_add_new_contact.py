@@ -29,6 +29,7 @@ class TestAddNewContact(unittest.TestCase):
         wd.find_element_by_name("nickname").click()
         wd.find_element_by_name("nickname").clear()
         wd.find_element_by_name("nickname").send_keys(contact.nickname)
+        wd.find_element_by_name("photo").send_keys(contact.photo)
         wd.find_element_by_name("title").click()
         wd.find_element_by_name("title").clear()
         wd.find_element_by_name("title").send_keys(contact.title)
@@ -113,23 +114,29 @@ class TestAddNewContact(unittest.TestCase):
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.create_new_contact(wd, Contact(firstname="first", middlename="middle", lastname="last", nickname="nick",
-                           title="my_title", company="my_company", address="my_address", home="my_home",
+                           photo="C:\\P&P4.jpg", title="my_title", company="my_company", address="my_address", home="my_home",
                            mobile="my_mobile", work="my_work", fax="my_fax", email="my_email", email2="my_email2",
                            email3="my_email3", homepage="my_homepage", bday="1", bmonth="January", byear="1985", aday="1",
                            amonth="January", ayear="1985", address2="second_address", phone2="second_home",
                            notes="my_notes"))
+        self.select_home_page(wd)
         self.logout(wd)
+
+    def select_home_page(self, wd):
+        wd.find_element_by_id("header").click()
+        wd.find_element_by_link_text("home").click()
 
     def test_add_empty_contact(self):
         wd = self.wd
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.create_new_contact(wd, Contact(firstname="", middlename="", lastname="", nickname="",
-                           title="", company="", address="", home="",
+                           photo="C:\\P&P4.jpg", title="", company="", address="", home="",
                            mobile="", work="", fax="", email="", email2="",
                            email3="", homepage="", bday="", bmonth="-", byear="", aday="",
                            amonth="-", ayear="", address2="", phone2="",
                            notes=""))
+        self.select_home_page(wd)
         self.logout(wd)
 
 
