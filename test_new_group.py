@@ -60,16 +60,6 @@ class TestNewGroup(unittest.TestCase):
         wd = self.wd
         wd.get("http://localhost/addressbook/")
 
-    def is_element_present(self, how, what):
-        try: self.wd.find_element(by=how, value=what)
-        except NoSuchElementException as e: return False
-        return True
-    
-    def is_alert_present(self):
-        try: self.wd.switch_to_alert()
-        except NoAlertPresentException as e: return False
-        return True
-
     def test_add_new_group(self):
         self.login(username="admin", password="secret")
         self.create_group(Group(name="test", header="test", footer="test"))
