@@ -13,7 +13,8 @@ class TestAddNewContact(unittest.TestCase):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
 
-    def create_new_contact(self, wd, contact):
+    def create_new_contact(self, contact):
+        wd = self.wd
         # init contact creation
         wd.find_element_by_link_text("add new").click()
         # fill contact form
@@ -93,10 +94,12 @@ class TestAddNewContact(unittest.TestCase):
         # submit contact creation
         wd.find_element_by_name("submit").click()
 
-    def logout(self, wd):
+    def logout(self):
+        wd = self.wd
         wd.find_element_by_link_text("Logout").click()
 
-    def login(self, wd, username, password):
+    def login(self, username, password):
+        wd = self.wd
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
@@ -106,38 +109,38 @@ class TestAddNewContact(unittest.TestCase):
         wd.find_element_by_name("pass").send_keys(password)
         wd.find_element_by_xpath("//input[@value='Login']").click()
 
-    def open_home_page(self, wd):
+    def open_home_page(self):
+        wd = self.wd
         wd.get("http://localhost/addressbook/")
 
     def test_add_new_contact(self):
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd, username="admin", password="secret")
-        self.create_new_contact(wd, Contact(firstname="first", middlename="middle", lastname="last", nickname="nick",
-                           photo="C:\\P&P4.jpg", title="my_title", company="my_company", address="my_address", home="my_home",
-                           mobile="my_mobile", work="my_work", fax="my_fax", email="my_email", email2="my_email2",
-                           email3="my_email3", homepage="my_homepage", bday="1", bmonth="January", byear="1985", aday="1",
-                           amonth="January", ayear="1985", address2="second_address", phone2="second_home",
-                           notes="my_notes"))
-        self.select_home_page(wd)
-        self.logout(wd)
+        self.open_home_page()
+        self.login(username="admin", password="secret")
+        self.create_new_contact(Contact(firstname="first", middlename="middle", lastname="last", nickname="nick",
+                                        photo="C:\\P&P4.jpg", title="my_title", company="my_company", address="my_address", home="my_home",
+                                        mobile="my_mobile", work="my_work", fax="my_fax", email="my_email", email2="my_email2",
+                                        email3="my_email3", homepage="my_homepage", bday="1", bmonth="January", byear="1985", aday="1",
+                                        amonth="January", ayear="1985", address2="second_address", phone2="second_home",
+                                        notes="my_notes"))
+        self.select_home_page()
+        self.logout()
 
-    def select_home_page(self, wd):
+    def select_home_page(self):
+        wd = self.wd
         wd.find_element_by_id("header").click()
         wd.find_element_by_link_text("home").click()
 
     def test_add_empty_contact(self):
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd, username="admin", password="secret")
-        self.create_new_contact(wd, Contact(firstname="", middlename="", lastname="", nickname="",
-                           photo="C:\\P&P4.jpg", title="", company="", address="", home="",
-                           mobile="", work="", fax="", email="", email2="",
-                           email3="", homepage="", bday="", bmonth="-", byear="", aday="",
-                           amonth="-", ayear="", address2="", phone2="",
-                           notes=""))
-        self.select_home_page(wd)
-        self.logout(wd)
+        self.open_home_page()
+        self.login(username="admin", password="secret")
+        self.create_new_contact(Contact(firstname="", middlename="", lastname="", nickname="",
+                                        photo="C:\\P&P4.jpg", title="", company="", address="", home="",
+                                        mobile="", work="", fax="", email="", email2="",
+                                        email3="", homepage="", bday="", bmonth="-", byear="", aday="",
+                                        amonth="-", ayear="", address2="", phone2="",
+                                        notes=""))
+        self.select_home_page()
+        self.logout()
 
 
 
