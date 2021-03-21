@@ -11,7 +11,6 @@ def test_add_new_contact(app):
                            email3="my_email3", homepage="my_homepage", bday="1", bmonth="January", byear="1985", aday="1",
                            amonth="January", ayear="1985", address2="second_address", phone2="second_home",
                            notes="my_notes"))
-    app.select_home_tab()
     app.session.logout()
 
 
@@ -23,6 +22,5 @@ def test_add_empty_contact(app):
                           email3="", homepage="", bday="", bmonth="-", byear="", aday="",
                           amonth="-", ayear="", address2="", phone2="",
                           notes=""))
-    app.select_home_tab()
     app.session.logout()
 

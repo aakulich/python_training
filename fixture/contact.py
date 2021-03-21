@@ -4,8 +4,16 @@ class ContactHelper:
     def __init__(self, app):
         self.app = app
 
+
+    def select_home_tab(self):
+        wd = self.app.wd
+        wd.find_element_by_id("header").click()
+        wd.find_element_by_link_text("home").click()
+
+
     def create(self, contact):
         wd = self.app.wd
+        self.select_home_tab()
         # init contact creation
         wd.find_element_by_link_text("add new").click()
         # fill contact form
@@ -88,7 +96,22 @@ class ContactHelper:
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit contact creation
         wd.find_element_by_name("submit").click()
+        self.return_to_home_page()
 
+    def delete_first_contact(self):
+        wd = self.app.wd
+        self.select_home_tab()
+        # select first contact
+        wd.find_element_by_name("selected[]").click()
+        # submit deletion
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to_alert().accept()
+        self.select_home_tab()
+
+
+    def return_to_home_page(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("home page").click()
 
 
 
