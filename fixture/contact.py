@@ -109,10 +109,14 @@ class ContactHelper:
         wd.find_element_by_name("update").click()
         self.select_home_tab()
 
-
     def return_to_home_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("home page").click()
+
+    def count(self):
+        wd = self.app.wd
+        self.select_home_tab()
+        return len(wd.find_elements_by_name("selected[]"))
 
 
 
