@@ -1,4 +1,4 @@
-from model import contact
+from model.contact import Contact
 
 
 class ContactHelper:
@@ -23,8 +23,8 @@ class ContactHelper:
         self.fill_contact_form(contact)
         # submit contact creation
         wd.find_element_by_name("submit").click()
-        #self.return_to_home_page()
-        self.select_home_tab()
+        self.return_to_home_page()
+        #self.select_home_tab()
 
     def fill_contact_form(self, contact):
         wd = self.app.wd
@@ -71,6 +71,7 @@ class ContactHelper:
         self.select_first_contact()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
+        #wd.find_element_by_css_selector("div.msgbox")
         self.select_home_tab()
 
     def select_first_contact(self):
@@ -119,7 +120,19 @@ class ContactHelper:
     def count(self):
         wd = self.app.wd
         self.select_home_tab()
-        return len(wd.find_elements_by_name("selected[]"))
+        return len(wd.find_elements_by_name("entry"))
+
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.select_home_tab()
+        contacts = []
+        for element in wd.find_elements_by_name("entry"):
+            first_name = element.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[2]").text
+            last_name = element.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[1]").text
+            id = element.find_element_by_name("selected[]").get_attribute("id")
+            contacts.append(Contact(id=id, firstname=first_name, lastname=last_name))
+        return contacts
 
 
 
