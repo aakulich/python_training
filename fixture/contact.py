@@ -87,7 +87,7 @@ class ContactHelper:
 
     def select_contact_by_index(self, index):
         wd = self.app.wd
-        wd.find_elements_by_name("selected[]")[index].click()
+        contact_selected = wd.find_element_by_name("entry")[index]
 
     def edit_first_contact(self, contact):
         wd = self.app.wd
@@ -147,10 +147,11 @@ class ContactHelper:
             self.select_home_tab()
             self.contact_cache = []
             for element in wd.find_elements_by_name("entry"):
-                first_name = element.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[2]").text
-                last_name = element.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[1]").text
-                id = element.find_element_by_name("selected[]").get_attribute("id")
-                self.contact_cache.append(Contact(id=id, firstname=first_name, lastname=last_name))
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                col = element.find_elements_by_tag_name('td')
+                first_name = col[2].text
+                last_name = col[1].text
+                self.contact_cache.append(Contact(id=id, lastname=last_name, firstname=first_name))
         return list(self.contact_cache)
 
 
