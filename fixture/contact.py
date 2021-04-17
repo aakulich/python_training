@@ -71,18 +71,18 @@ class ContactHelper:
     #    wd = self.app.wd
    #     self.edit_contact_by_index(0)
 
- #   def edit_contact_by_index(self, index, new_contact_data):
- #       wd = self.app.wd
- #       self.select_home_tab()
- #       self.select_contact_by_index(index)
+    def edit_contact_by_index(self, index, new_contact_data):
+        wd = self.app.wd
+        self.select_home_tab()
+        self.select_contact_by_index(index)
         # click edit
- #       wd.find_element_by_xpath("//img[@alt='Edit']").click()
+        #wd.find_element_by_xpath("//img[@alt='Edit']").click()
         # edit contact form
-  #      self.fill_contact_form(new_contact_data)
+        self.fill_contact_form(new_contact_data)
         # select update
-  #      wd.find_element_by_name("update").click()
-   #     self.select_home_tab()
-   #     self.contact_cache = None
+        wd.find_element_by_name("update").click()
+        self.select_home_tab()
+        self.contact_cache = None
 
 
     def view_first_contact_details(self):
