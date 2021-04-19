@@ -6,7 +6,7 @@ import string
 
 
 def random_string(prefix, maxlen):
-    symbols = string.ascii_letters + string.digits + string.punctuation + " "*10
+    symbols = string.ascii_letters + string.digits + " "*10
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
@@ -19,8 +19,6 @@ testdata = [Contact(firstname='', lastname='')] + [
 @pytest.mark.parametrize("contact", testdata, ids=[repr(x) for x in testdata])
 def test_add_new_contact(app, contact):
     old_contacts = app.contact.get_contact_list()
-    contact = Contact(firstname="first", lastname="last", home="11111",
-                           mobile="22222", work="33333", phone2="44444")
     app.contact.create(contact)
     assert len(old_contacts) + 1 == app.contact.count()
     new_contacts = app.contact.get_contact_list()
