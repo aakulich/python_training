@@ -78,10 +78,11 @@ class ContactHelper:
 
     def select_contact_by_id(self, id):
         wd = self.app.wd
-#        row = wd.find_element_by_id("entry")
-        row = wd.find_element_by_css_selector("input[value='%s']" % id)
-        cells = row.find_elements_by_tag_name('td')[7]
-        cells.find_element_by_tag_name("a").click()
+        for row in wd.find_elements_by_name("entry"):
+            if row.find_element_by_xpath("//td/input[@value='%s']" % id):
+                cells = row.find_element_by_tag_name('td')[7]
+                cells.find_element_by_tag_name("a").click()
+
 
 
    # def edit_first_contact(self, contact):
@@ -102,10 +103,10 @@ class ContactHelper:
         self.contact_cache = None
 
 
-    def edit_contact_by_index(self, index, new_contact_data):
+    def edit_contact_by_id(self, id, new_contact_data):
         wd = self.app.wd
         self.select_home_tab()
-        self.select_contact_by_index(index)
+        self.select_contact_by_id(id)
         # click edit
         #wd.find_element_by_xpath("//img[@alt='Edit']").click()
         # edit contact form
