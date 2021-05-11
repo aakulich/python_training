@@ -46,7 +46,7 @@ def test_compare_names_address_on_home_page_and_db(app, db):
     for contact in contact_from_home_page:
         assert contact.firstname.strip() == contact_from_db[i].firstname.strip()
         assert contact.lastname.strip() == contact_from_db[i].lastname.strip()
-#        assert contact.address == contact_from_db[i].address
+        assert contact.address == contact_from_db[i].address
         i=i+1
 
 #    assert contact_from_home_page.address == contact_from_db.address
