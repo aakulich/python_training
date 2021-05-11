@@ -1,4 +1,5 @@
 import re
+from fixture.contact import Contact
 
 
 def test_phones_on_home_page(app):
@@ -32,10 +33,23 @@ def test_emails_on_home_page(app):
 
 
 def test_names_address_on_home_page(app):
-    contact_from_edit_page, contact_from_home_page = home_edit_page_data(app)
+    contact_from_home_page = app.contact.get_contact_list()[0]
+    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(0)
     assert contact_from_home_page.firstname == contact_from_edit_page.firstname
     assert contact_from_home_page.lastname == contact_from_edit_page.lastname
     assert contact_from_home_page.address == contact_from_edit_page.address
+
+def test_compare_names_address_on_home_page_and_db(app, db):
+    contact_from_home_page = sorted(app.contact.get_contact_list(), key=Contact.id_or_max)
+    contact_from_db = db.get_contact_list()
+    i = 0
+    for contact in contact_from_home_page:
+        assert contact.firstname.strip() == contact_from_db[i].firstname.strip()
+        assert contact.lastname.strip() == contact_from_db[i].lastname.strip()
+#        assert contact.address == contact_from_db[i].address
+        i=i+1
+
+#    assert contact_from_home_page.address == contact_from_db.address
 
 
 def clear(s):
