@@ -78,11 +78,15 @@ class ContactHelper:
 
     def select_contact_by_id(self, id):
         wd = self.app.wd
+        i = 0
         for row in wd.find_elements_by_name("entry"):
-            if row.find_element_by_xpath("//td/input[@value='%s']" % id):
-                cells = row.find_element_by_tag_name('td')[7]
-                cells.find_element_by_tag_name("a").click()
-
+            cells = row.find_elements_by_tag_name('td')
+            id_v = cells[0].find_element_by_tag_name("input").get_attribute("value")
+            if id_v == id:
+                cells[7].find_element_by_tag_name("a").click()
+                break
+            else:
+                i = i+1
 
 
    # def edit_first_contact(self, contact):
