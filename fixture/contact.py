@@ -1,7 +1,7 @@
 from model.contact import Contact
 import re
 from selenium.webdriver.support.ui import Select
-
+import random
 
 
 
@@ -93,21 +93,10 @@ class ContactHelper:
 
 
 
-
-    def check_contact_by_id(self, id):
-        wd = self.app.wd
-        i = 0
-        for row in wd.find_elements_by_name("entry"):
-            cells = row.find_elements_by_tag_name('td')
-            id_v = cells[0].find_element_by_tag_name("input").get_attribute("value")
-            if id_v == id:
-                cells[0].find_element_by_name("selected[]").click()
-                break
-            else:
-                i = i+1
    # def edit_first_contact(self, contact):
     #    wd = self.app.wd
    #     self.edit_contact_by_index(0)
+
 
     def edit_contact_by_index(self, index, new_contact_data):
         wd = self.app.wd
@@ -156,6 +145,21 @@ class ContactHelper:
         #self.return_to_home_page()
         self.contact_cache = None
 
+
+    def check_contact_by_id(self, id):
+        wd = self.app.wd
+        i = 0
+        for row in wd.find_elements_by_name("entry"):
+            cells = row.find_elements_by_tag_name('td')
+            id_v = cells[0].find_element_by_tag_name("input").get_attribute("value")
+            if id_v == id:
+                cells[0].find_element_by_name("selected[]").click()
+                break
+            else:
+                i = i+1
+
+
+
     def select_group_to_add(self, group_id):
         wd = self.app.wd
         Select(wd.find_element_by_name("to_group")).select_by_value(group_id)
@@ -173,17 +177,31 @@ class ContactHelper:
         Select(wd.find_element_by_name("group")).select_by_value(group_id)
 
 
+    def remove_contact_from_group(self, group_id):
+        wd = self.app.wd
+        self.select_home_tab()
+        self.select_group_from_dropdown(group_id)
+        row = random.choice(wd.find_elements_by_name("entry"))
+        cells = row.find_elements_by_tag_name('td')
+        cells[0].find_element_by_name("selected[]").click()
+        wd.find_element_by_name("remove").click()
+
+
+
     def return_to_home_page(self):
         wd = self.app.wd
         if not (wd.current_url.endswith("/") and len(wd.find_elements_by_name("add")) > 0):
             wd.find_element_by_link_text("home page").click()
+
 
     def count(self):
         wd = self.app.wd
         self.select_home_tab()
         return len(wd.find_elements_by_name("entry"))
 
+
     contact_cache = None
+
 
     def get_contact_list(self):
         if self.contact_cache is None:
