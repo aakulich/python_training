@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import Select
 
 
 
+
 class ContactHelper:
 
     def __init__(self, app):
@@ -150,15 +151,26 @@ class ContactHelper:
         self.select_home_tab()
         # select contact
         self.check_contact_by_id(contact_id)
-        self.select_group_from_dropdown(group_id)
+        self.select_group_to_add(group_id)
         wd.find_element_by_name("add").click()
         #self.return_to_home_page()
         self.contact_cache = None
 
-    def select_group_from_dropdown(self, group_id):
+    def select_group_to_add(self, group_id):
         wd = self.app.wd
         Select(wd.find_element_by_name("to_group")).select_by_value(group_id)
 
+    def check_contact_in_group(self, group_id):
+        wd = self.app.wd
+        self.select_home_tab()
+        self.select_group_from_dropdown(group_id)
+        i = len(wd.find_elements_by_name("entry"))
+        return i
+
+
+    def select_group_from_dropdown(self, group_id):
+        wd = self.app.wd
+        Select(wd.find_element_by_name("group")).select_by_value(group_id)
 
 
     def return_to_home_page(self):
