@@ -1,5 +1,7 @@
 from model.contact import Contact
 import re
+from selenium.webdriver.support.ui import Select
+
 
 
 class ContactHelper:
@@ -89,6 +91,19 @@ class ContactHelper:
                 i = i+1
 
 
+
+
+    def check_contact_by_id(self, id):
+        wd = self.app.wd
+        i = 0
+        for row in wd.find_elements_by_name("entry"):
+            cells = row.find_elements_by_tag_name('td')
+            id_v = cells[0].find_element_by_tag_name("input").get_attribute("value")
+            if id_v == id:
+                cells[0].find_element_by_name("selected[]").click()
+                break
+            else:
+                i = i+1
    # def edit_first_contact(self, contact):
     #    wd = self.app.wd
    #     self.edit_contact_by_index(0)
@@ -130,18 +145,21 @@ class ContactHelper:
         self.select_home_tab()
 
 
-  #  def modify_first_contact_details(self, contact):
-   #     wd = self.app.wd
-    #    self.select_home_tab()
-     #   self.select_first_contact()
-        # click Details
-     #   wd.find_element_by_xpath("//img[@alt='Details']").click()
-     #   wd.find_element_by_name("modify").click()
-     #   self.fill_contact_form(contact)
-     #   # select update
-     #   wd.find_element_by_name("update").click()
-     #   self.select_home_tab()
-     #   self.contact_cache = None
+    def add_contact_to_group(self, contact_id, group_id):
+        wd = self.app.wd
+        self.select_home_tab()
+        # select contact
+        self.check_contact_by_id(contact_id)
+        self.select_group_from_dropdown(group_id)
+        wd.find_element_by_name("add").click()
+        #self.return_to_home_page()
+        self.contact_cache = None
+
+    def select_group_from_dropdown(self, group_id):
+        wd = self.app.wd
+        Select(wd.find_element_by_name("to_group")).select_by_value(group_id)
+
+
 
     def return_to_home_page(self):
         wd = self.app.wd
