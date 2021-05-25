@@ -10,17 +10,23 @@ def test_add_contact_to_group(app, db, orm):
         app.contact.create(contact)
         group = Group(name="group_cont")
         app.group.create(group)
+        group = random.choice(db.get_group_list())
+        group_id = group.id
+        contact = random.choice(db.get_contact_list())
         app.contact.add_contact_to_group(contact.id, group.id)
     elif len(db.get_contact_list()) == 0 and len(db.get_group_list()) > 0:
         contact = Contact(firstname="group_cont")
         app.contact.create(contact)
         group = random.choice(db.get_group_list())
-        app.group.create(group)
+        group_id = group.id
+        contact = random.choice(db.get_contact_list())
         app.contact.add_contact_to_group(contact.id, group.id)
     elif len(db.get_contact_list()) > 0 and len(db.get_group_list()) == 0:
         group = Group(name="group_cont")
         app.group.create(group)
         contact = random.choice(db.get_contact_list())
+        group = random.choice(db.get_group_list())
+        group_id = group.id
         app.contact.add_contact_to_group(contact.id, group.id)
     else:
         i = 0
@@ -35,9 +41,11 @@ def test_add_contact_to_group(app, db, orm):
             else:
                 i = i+1
                 if i == lg:
-                    group = Group(name="group_extra")
+                    group = Group(name="group_cont")
                     app.group.create(group)
                     contact = random.choice(db.get_contact_list())
+                    group = random.choice(db.get_group_list())
+                    group_id = group.id
                     app.contact.add_contact_to_group(contact.id, group.id)
                     break
     assert app.contact.check_contact_in_group(group_id) == len(orm.get_contacts_in_group(group))
