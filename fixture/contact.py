@@ -31,6 +31,7 @@ class ContactHelper:
         #self.select_home_tab()
         self.contact_cache = None
 
+
     def fill_contact_form(self, contact):
         wd = self.app.wd
         self.change_field_value("firstname", contact.firstname)
@@ -171,6 +172,16 @@ class ContactHelper:
         i = len(wd.find_elements_by_name("entry"))
         return i
 
+    def check_contact_not_in_group(self, group_id):
+        wd = self.app.wd
+        self.select_home_tab()
+        Select(wd.find_element_by_name("group")).select_by_value('')
+        a = len(wd.find_elements_by_name("entry"))
+        self.select_group_from_dropdown(group_id)
+        b = len(wd.find_elements_by_name("entry"))
+        i = a - b
+        return i
+
 
     def select_group_from_dropdown(self, group_id):
         wd = self.app.wd
@@ -185,6 +196,7 @@ class ContactHelper:
         cells = row.find_elements_by_tag_name('td')
         cells[0].find_element_by_name("selected[]").click()
         wd.find_element_by_name("remove").click()
+        return group_id
 
 
 
