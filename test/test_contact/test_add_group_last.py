@@ -46,7 +46,7 @@ def list_contact_with_group_id(db, group_id):
     return lgid
 
 def res_contact_list(db, group_id):
-    # из списка всех контактов удалены контакты, которые уже добавлены в конкретную группу
+    # из списка id всех контактов удалены id контактов, которые уже добавлены в конкретную группу
     a = list_contact_id(db)
     b = list_contact_with_group_id(db, group_id)
 
@@ -60,23 +60,26 @@ def res_contact_list(db, group_id):
     return a
 
 
-
-
-
-
-def test_add_contact_to_group(app, db, orm):
-    check_contact_and_group_present(app, db)
-
+def proper_couple_to_add(app, db, orm):
+    # возвращает пару контакт-группа, которую можно использовать для теста
     i = 0
     lg = len(orm.get_group_list())
+    couple = []
+    contact = object
 
-    for g in orm.get_group_list():
+    for g in db.get_group_list():
         if len(orm.get_contacts_not_in_group(g)) > 0:
             group = g
             group_id = g.id
-            contact = random.choice(res_contact_list(db, group_id))
-            contact_id = contact
-            app.contact.add_contact_to_group(contact_id, group_id)
+            contact_id = random.choice(res_contact_list(db, group_id))
+            for c in db.get_contact_list():
+                if str(c.id) == contact_id:
+                    contact = c
+                    break
+                else:
+                    pass
+            couple.append(contact)
+            couple.append(group)
             break
         else:
             i = i+1
@@ -85,9 +88,21 @@ def test_add_contact_to_group(app, db, orm):
                 app.group.create(group)
                 contact = random.choice(db.get_contact_list())
                 group = random.choice(db.get_group_list())
-                group_id = group.id
-                app.contact.add_contact_to_group(contact.id, group.id)
+                couple.append(contact)
+                couple.append(group)
                 break
+    return couple
+
+
+def test_add_contact_to_group(app, db, orm):
+    check_contact_and_group_present(app, db)
+
+    list = proper_couple_to_add(app, db, orm)
+    contact = list[0]
+    contact_id = contact.id
+    group = list[1]
+    group_id = group.id
+    app.contact.add_contact_to_group(contact_id, group_id)
 
     assert app.contact.check_contact_in_group(group_id) == len(orm.get_contacts_in_group(group))
     assert len(orm.get_contacts_in_group(group)) > 0
