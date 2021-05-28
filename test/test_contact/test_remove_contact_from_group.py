@@ -24,6 +24,7 @@ def proper_group_to_remove_contact(app, db, orm):
     lg = len(orm.get_group_list())
     group = object
 
+
     for g in orm.get_group_list():
 
         if len(orm.get_contacts_in_group(g)) > 0:  # проверяем есть ли такие контакты, которые добавлены в эту группу
@@ -42,11 +43,15 @@ def proper_group_to_remove_contact(app, db, orm):
 
 def test_remove_contact_from_group(app, db, orm):
     check_contact_and_group_present(app, db)
+    old_contacts_in_groups = db.get_contact_with_group_list()
     group = proper_group_to_remove_contact(app, db, orm)
     group_id = group.id
-    app.contact.remove_contact_from_group(group_id)
+    contact_id = app.contact.remove_contact_from_group(group_id)
+    new_contacts_in_groups = db.get_contact_with_group_list()
+    assert len(old_contacts_in_groups) - 1 == len(new_contacts_in_groups)
     assert app.contact.check_contact_not_in_group(group_id) == len(orm.get_contacts_not_in_group(group))
     assert len(orm.get_contacts_not_in_group(group)) > 0
+
 
 
 

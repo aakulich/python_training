@@ -2,6 +2,8 @@ from model.contact import Contact
 import re
 from selenium.webdriver.support.ui import Select
 import random
+from model.group import Group
+from fixture.group import GroupHelper
 
 
 
@@ -194,9 +196,10 @@ class ContactHelper:
         self.select_group_from_dropdown(group_id)
         row = random.choice(wd.find_elements_by_name("entry"))
         cells = row.find_elements_by_tag_name('td')
+        contact_id = cells[0].find_element_by_tag_name("input").get_attribute("value")
         cells[0].find_element_by_name("selected[]").click()
         wd.find_element_by_name("remove").click()
-        return group_id
+        return contact_id
 
 
 
@@ -279,3 +282,5 @@ class ContactHelper:
         phone2 = re.search("P: (.*)", text).group(1)
         return Contact(home=home, mobile=mobile, work=work,
                        phone2=phone2)
+
+

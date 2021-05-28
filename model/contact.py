@@ -33,3 +33,10 @@ class Contact:
             return int(self.id)
         else:
             return maxsize
+
+    def id_gr_or_max(self):
+            if self.group_id:
+                return int(self.group_id)
+            else:
+                return maxsize
+

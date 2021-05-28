@@ -102,7 +102,16 @@ def test_add_contact_to_group(app, db, orm):
     contact_id = contact.id
     group = list[1]
     group_id = group.id
+    old_contacts_in_groups = db.get_contact_with_group_list()
     app.contact.add_contact_to_group(contact_id, group_id)
-
+    new_contacts_in_groups = db.get_contact_with_group_list()
     assert app.contact.check_contact_in_group(group_id) == len(orm.get_contacts_in_group(group))
     assert len(orm.get_contacts_in_group(group)) > 0
+    for c in db.get_contact_with_group_list():
+        if str(c.id) == contact_id and str(c.group_id) == group_id:
+            contact = c
+            break
+        else:
+            pass
+    old_contacts_in_groups.append(contact)
+    assert sorted(sorted(old_contacts_in_groups, key=Contact.id_or_max), key=Contact.id_gr_or_max) == sorted(sorted(new_contacts_in_groups, key=Contact.id_or_max), key=Contact.id_gr_or_max)
